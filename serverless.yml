@@ -1,20 +1,24 @@
-service:
-  name: auction-serivce
+service: auction-api
 
 plugins:
   - serverless-bundle
-  - serverless-pseudo-parameters
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   memorySize: 256
   stage: ${opt:stage, 'dev'}
-  
+  region: ${opt:region, 'eu-west-1'}
+  lambdaHashingVersion: 20201221
+
 functions:
-  hello:
-    handler: src/handlers/hello.handler
+  createAuction:
+    handler: src/handlers/createAuction.handler
     events:
       - http:
-          method: GET
-          path: /hello
+          method: POST
+          path: /auction
+
+custom:
+  bundle:
+    linting: false
