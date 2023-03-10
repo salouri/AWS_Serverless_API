@@ -10,5 +10,8 @@
     "babel-preset-env": "^1.7.0",
     "serverless-bundle": "^6.0.0",
     "webpack": "^5.76.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.288.0"
   }
 }
