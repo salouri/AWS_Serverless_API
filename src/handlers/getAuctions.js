@@ -1,5 +1,4 @@
 'use strict';
-import crypto from 'crypto';
 import ddbDocClient from '../libs/ddbDocClient.js';
 import { ScanCommand } from '@aws-sdk/lib-dynamodb';
 import middy from '@middy/core';
