@@ -22,7 +22,7 @@ const placeBid = async (event, context) => {
   try {
     const data = await ddbDocClient.send(new UpdateCommand(params));
     console.log(`data: ${JSON.stringify(data, null, 2)}`);
-    updatedAuction = data;
+    updatedAuction = data?.Attributes;
   } catch (error) {
     console.log(error);
     throw new createError.InternalServerError('Ops! something went wrong');
