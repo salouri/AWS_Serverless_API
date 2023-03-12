@@ -3,4 +3,5 @@ AuctionsTableIAM:
   Action:
     - dynamodb:PutItem # Create
     - dynamodb:Scan # Read
+    - dynamodb:GetItem # Read
   Resource: ${self:custom.AuctionsTable.arn}
