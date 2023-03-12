@@ -1,7 +1,7 @@
 'use strict';
 import crypto from 'crypto';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
+import ddbDocClient from '../libs/ddbDocClient';
+import { PutCommand } from '@aws-sdk/lib-dynamodb';
 import middy from '@middy/core';
 import httpErrorHandler from '@middy/http-error-handler';
 import httpJsonBodyParser from '@middy/http-json-body-parser';
@@ -24,13 +24,11 @@ const createAuction = async (event, context) => {
   let result = {};
   let status = 201;
   try {
-    const client = new DynamoDBClient({ region: 'eu-west-1' });
-    const docClient = DynamoDBDocumentClient.from(client);
-    result = await docClient.send(new PutCommand(params));
+    result = await ddbDocClient.send(new PutCommand(params));
     console.log(`result: ${JSON.stringify(result, null, 2)}`);
   } catch (error) {
-    throw new createError.InternalServerError(error);
-    console.log('error:', error);
+    console.log(error);
+    throw new createError.InternalServerError('Ops! something went wrong');
   }
 
   return {
