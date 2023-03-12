@@ -9,7 +9,15 @@ provider:
   memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-west-1'}
-  lambdaHashingVersion: 20201221
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - dynamodb:PutItem
+          Resource:
+            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/AuctionsTable
+          # - Fn::GetAtt: [AuctionsTable, Arn]
 
 resources:
   Resources:
@@ -24,7 +32,7 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-            
+
 functions:
   createAuction:
     handler: src/handlers/createAuction.handler
