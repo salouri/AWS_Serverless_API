@@ -9,6 +9,9 @@ provider:
   memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-west-1'}
+  environment:
+    AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
   iam:
     role:
       statements:
@@ -27,5 +30,8 @@ functions:
           path: /auction
 
 custom:
+  AuctionsTable:
+    name: !Ref AuctionsTable
+    arn: !GetAtt AuctionsTable.Arn
   bundle:
     linting: false

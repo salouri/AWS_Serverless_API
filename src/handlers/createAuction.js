@@ -13,7 +13,7 @@ const createAuction = async (event, context) => {
     createdAt: new Date().toISOString(),
   };
   const params = {
-    TableName: 'AuctionsTable',
+    TableName: process.env.AUCTIONS_TABLE_NAME,
     Item: auction,
   };
   let result = {};

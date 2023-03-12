@@ -1,7 +1,5 @@
 AuctionsTableIAM:
   Effect: 'Allow'
   Action:
-     - dynamodb:PutItem
-  Resource:
-      - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/AuctionsTable
-    # - Fn::GetAtt: [AuctionsTable, Arn]
+    - dynamodb:PutItem
+  Resource: ${self:custom.AuctionsTable.arn}
