@@ -1,11 +1,7 @@
 'use strict';
 import ddbDocClient from '../libs/ddbDocClient.js';
 import { GetCommand } from '@aws-sdk/lib-dynamodb';
-import middy from '@middy/core';
-import httpHeaderNormalizer from '@middy/http-header-normalizer';
-import httpErrorHandler from '@middy/http-error-handler';
-import httpEventNormalizer from '@middy/http-event-normalizer';
-import httpJsonBodyParser from '@middy/http-json-body-parser';
+import commonMiddleware from '../libs/commonMiddleware.js';
 import createError from 'http-errors';
 
 const getAuction = async (event, context) => {
@@ -33,8 +29,4 @@ const getAuction = async (event, context) => {
   };
 };
 
-export const handler = middy(getAuction)
-  .use(httpHeaderNormalizer())
-  .use(httpJsonBodyParser())
-  .use(httpEventNormalizer())
-  .use(httpErrorHandler());
+export const handler = commonMiddleware(getAuction);
