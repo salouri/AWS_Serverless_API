@@ -1,10 +1,9 @@
 'use strict';
 import crypto from 'crypto';
-import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 
-const client = new DynamoDBClient({ region: 'eu-west-1' });
-
-async function createAuction(event, context) {
+const createAuction = async (event, context) => {
   const body = JSON.parse(event.body);
 
   const auction = {
@@ -13,19 +12,26 @@ async function createAuction(event, context) {
     status: 'OPEN',
     createdAt: new Date().toISOString(),
   };
-
-  const input = {
+  const params = {
     TableName: 'AuctionsTable',
     Item: auction,
   };
-
-  const command = new PutItemCommand(input);
-  const result = await client.send(command);
+  let result = {};
+  let status = 201;
+  try {
+    const client = new DynamoDBClient({ region: 'eu-west-1' });
+    const docClient = DynamoDBDocumentClient.from(client);
+    result = await docClient.send(new PutCommand(params));
+    console.log(`result: ${JSON.stringify(result, null, 2)}`);
+  } catch (error) {
+    status = 500;
+    console.log('error:', error);
+  }
 
   return {
-    statusCode: 201,
+    statusCode: status,
     body: JSON.stringify(result),
   };
-}
+};
 
 export const handler = createAuction;
