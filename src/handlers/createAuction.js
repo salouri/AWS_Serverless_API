@@ -13,6 +13,9 @@ const createAuction = async (event, context) => {
     title: body.title,
     status: 'OPEN',
     createdAt: new Date().toISOString(),
+    highestBid: {
+      amount: 0,
+    },
   };
   const params = {
     TableName: process.env.AUCTIONS_TABLE_NAME,
@@ -29,7 +32,7 @@ const createAuction = async (event, context) => {
 
   return {
     statusCode: 201,
-    body: JSON.stringify(result),
+    body: JSON.stringify(auction),
   };
 };
 
