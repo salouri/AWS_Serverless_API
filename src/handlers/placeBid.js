@@ -2,12 +2,20 @@
 import ddbDocClient from '../libs/ddbDocClient.js';
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import commonMiddleware from '../libs/commonMiddleware.js';
+import getAuctionById from '../libs/getAuctionById.js';
+
 import createError from 'http-errors';
 
 const placeBid = async (event, context) => {
   let updatedAuction;
   const { id } = event.pathParameters;
   const { amount } = event.body;
+  const auction = await getAuctionById(id);
+  if (amount <= auction.highestBid.amount) {
+    throw new createError.Forbidden(
+      `Your bid must be higher than ${auction.highestBid.amount}!`
+    );
+  }
 
   const params = {
     TableName: process.env.AUCTIONS_TABLE_NAME,
