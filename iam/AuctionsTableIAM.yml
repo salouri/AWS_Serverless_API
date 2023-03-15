@@ -5,4 +5,5 @@ AuctionsTableIAM:
     - dynamodb:Scan # Read
     - dynamodb:GetItem # Read
     - dynamodb:UpdateItem # Update
+    - dynamodb:DeleteItem # Delete
   Resource: ${self:custom.AuctionsTable.arn}

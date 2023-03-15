@@ -19,7 +19,7 @@ provider:
 
 resources:
   Resources:
-    AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable}
+    AuctionsTableRes: ${file(resources/AuctionsTable.yml):AuctionsTable}
 
 functions:
   createAuction:
@@ -43,6 +43,13 @@ functions:
           method: GET
           path: /auction/{id}
 
+  deleteAuction:
+    handler: src/handlers/deleteAuction.handler
+    events:
+      - http:
+          method: DELETE
+          path: /auction/{id}
+
   placeBid:
     handler: src/handlers/placeBid.handler
     events:
@@ -52,7 +59,7 @@ functions:
 
 custom:
   AuctionsTable:
-    name: !Ref AuctionsTable
-    arn: !GetAtt AuctionsTable.Arn
+    name: !Ref AuctionsTableRes
+    arn: !GetAtt AuctionsTableRes.Arn
   bundle:
     linting: false
