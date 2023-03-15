@@ -7,12 +7,15 @@ import createError from 'http-errors';
 
 const createAuction = async (event, context) => {
   const body = event.body;
+  const now = new Date();
+  const endDate = new Date().setHours(now.getHours() + 1);
 
   const auction = {
     id: crypto.randomUUID(),
     title: body.title,
     status: 'OPEN',
-    createdAt: new Date().toISOString(),
+    createdAt: now.toISOString(),
+    endingAt: endDate,
     highestBid: {
       amount: 0,
     },
