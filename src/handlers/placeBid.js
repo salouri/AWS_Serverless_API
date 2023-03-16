@@ -1,10 +1,12 @@
 'use strict';
-import ddbDocClient from '../libs/ddbDocClient.js';
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import commonMiddleware from '../libs/commonMiddleware.js';
-import getAuctionById from '../libs/getAuctionById.js';
-
 import createError from 'http-errors';
+import ddbDocClient from '../libs/ddbDocClient.js';
+import commonMiddleware from '../libs/commonMiddleware.js';
+import validatorMiddleware from '@middy/validator';
+import getAuctionById from '../libs/getAuctionById.js';
+import placeBidSchema from '../libs/schemas/placeBidSchema.js';
+import responseSchema from '../libs/schemas/httpLambdaResponseSchema.js';
 
 const placeBid = async (event, context) => {
   let updatedAuction;
@@ -12,7 +14,9 @@ const placeBid = async (event, context) => {
   const { amount } = event.body;
   const auction = await getAuctionById(id);
   if (auction.status !== 'OPEN') {
-    throw new createError.Forbidden(`Auction was closed on ${auction.endingAt.slice(0,19)}`);
+    throw new createError.Forbidden(
+      `Auction was closed on ${auction.endingAt.slice(0, 19)}`
+    );
   }
   if (amount <= auction.highestBid.amount) {
     throw new createError.Forbidden(
@@ -52,4 +56,13 @@ const placeBid = async (event, context) => {
   };
 };
 
-export const handler = commonMiddleware(placeBid);
+export const handler = commonMiddleware(placeBid).use(
+  validatorMiddleware({
+    responseSchema,
+    eventSchema: placeBidSchema,
+    ajvOptions: {
+      useDefaults: false,
+      strict: false,
+    },
+  })
+);
