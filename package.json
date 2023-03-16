@@ -19,6 +19,7 @@
     "@middy/http-event-normalizer": "^4.2.6",
     "@middy/http-header-normalizer": "^4.2.6",
     "@middy/http-json-body-parser": "^4.2.6",
+    "@middy/validator": "^4.2.7",
     "http-errors": "^2.0.0"
   }
 }
