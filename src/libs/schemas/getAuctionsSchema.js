@@ -1,6 +1,9 @@
-const schema = {
+import { transpileSchema } from '@middy/validator/transpile';
+
+const schema = transpileSchema({
   type: 'object',
   properties: {
+    required: ['queryStringParameters'],
     queryStringParameters: {
       type: 'object',
       properties: {
@@ -13,7 +16,19 @@ const schema = {
       required: ['status'],
     }, // end queryStringParameters
   },
-  required: ['queryStringParameters'],
-};
+});
+
+export const responseSchema = transpileSchema({
+  type: 'object',
+  required: ['body', 'statusCode'],
+  properties: {
+    body: {
+      type: 'string',
+    },
+    statusCode: {
+      type: 'number',
+    },
+  },
+});
 
 export default schema;

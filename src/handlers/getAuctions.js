@@ -4,8 +4,9 @@ import { QueryCommand } from '@aws-sdk/lib-dynamodb';
 import createError from 'http-errors';
 import commonMiddleware from '../libs/commonMiddleware.js';
 import validatorMiddleware from '@middy/validator';
-import getAuctionsSchema from '../libs/schemas/getAuctionsSchema.js';
-import { transpileSchema } from '@middy/validator/transpile';
+import getAuctionsSchema, {
+  responseSchema,
+} from '../libs/schemas/getAuctionsSchema.js';
 
 const getAuctions = async (event, context) => {
   let auctions;
@@ -42,7 +43,8 @@ const getAuctions = async (event, context) => {
 
 export const handler = commonMiddleware(getAuctions).use(
   validatorMiddleware({
-    eventSchema: transpileSchema(getAuctionsSchema),
+    responseSchema,
+    eventSchema: getAuctionsSchema,
     ajvOptions: {
       useDefaults: true,
       strict: false,
