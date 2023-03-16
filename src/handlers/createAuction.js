@@ -1,19 +1,23 @@
 'use strict';
 import crypto from 'crypto';
-import ddbDocClient from '../libs/ddbDocClient.js';
 import { PutCommand } from '@aws-sdk/lib-dynamodb';
-import commonMiddleware from '../libs/commonMiddleware.js';
 import createError from 'http-errors';
+import validatorMiddleware from '@middy/validator';
+import ddbDocClient from '../libs/ddbDocClient.js';
+import commonMiddleware from '../libs/commonMiddleware.js';
+import createAuctionSchema, {
+  responseSchema,
+} from '../libs/schemas/createAuctionSchema.js';
 
 const createAuction = async (event, context) => {
-  const body = event.body;
+  const { title } = event.body;
   const now = new Date();
   const endDate = new Date();
   endDate.setHours(now.getHours() + 1);
 
   const auction = {
     id: crypto.randomUUID(),
-    title: body.title,
+    title,
     status: 'OPEN',
     createdAt: now.toISOString(),
     endingAt: endDate.toISOString(),
@@ -40,4 +44,13 @@ const createAuction = async (event, context) => {
   };
 };
 
-export const handler = commonMiddleware(createAuction);
+export const handler = commonMiddleware(createAuction).use(
+  validatorMiddleware({
+    responseSchema,
+    eventSchema: createAuctionSchema,
+    ajvOptions: {
+      useDefaults: false,
+      strict: false,
+    },
+  })
+);
