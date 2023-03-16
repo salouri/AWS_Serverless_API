@@ -11,6 +11,9 @@ const placeBid = async (event, context) => {
   const { id } = event.pathParameters;
   const { amount } = event.body;
   const auction = await getAuctionById(id);
+  if (auction.status !== 'OPEN') {
+    throw new createError.Forbidden(`Auction was closed on ${auction.endingAt.slice(0,19)}`);
+  }
   if (amount <= auction.highestBid.amount) {
     throw new createError.Forbidden(
       `Your bid must be higher than ${auction.highestBid.amount}!`
@@ -21,8 +24,13 @@ const placeBid = async (event, context) => {
     TableName: process.env.AUCTIONS_TABLE_NAME,
     Key: { id },
     UpdateExpression: 'set highestBid.amount = :amount',
+    ConditionExpression: 'highestBid.amount < :amount AND #status = :status',
     ExpressionAttributeValues: {
       ':amount': amount,
+      ':status': 'OPEN',
+    },
+    ExpressionAttributeNames: {
+      '#status': 'status',
     },
     ReturnValues: 'ALL_NEW',
   };
