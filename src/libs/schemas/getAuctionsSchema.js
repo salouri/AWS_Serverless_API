@@ -1,6 +1,6 @@
 import { transpileSchema } from '@middy/validator/transpile';
 
-export default getAuctionSchema = transpileSchema({
+const getAuctionSchema = transpileSchema({
   type: 'object',
   properties: {
     required: ['queryStringParameters'],
@@ -17,3 +17,5 @@ export default getAuctionSchema = transpileSchema({
     }, // end queryStringParameters
   },
 });
+
+export default getAuctionSchema;
