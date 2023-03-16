@@ -5,9 +5,8 @@ import createError from 'http-errors';
 import validatorMiddleware from '@middy/validator';
 import ddbDocClient from '../libs/ddbDocClient.js';
 import commonMiddleware from '../libs/commonMiddleware.js';
-import createAuctionSchema, {
-  responseSchema,
-} from '../libs/schemas/createAuctionSchema.js';
+import createAuctionSchema from '../libs/schemas/createAuctionSchema.js';
+import responseSchema from '../libs/schemas/httpLambdaResponseSchema.js';
 
 const createAuction = async (event, context) => {
   const { title } = event.body;

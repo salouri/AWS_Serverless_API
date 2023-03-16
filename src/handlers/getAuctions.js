@@ -4,9 +4,8 @@ import { QueryCommand } from '@aws-sdk/lib-dynamodb';
 import createError from 'http-errors';
 import commonMiddleware from '../libs/commonMiddleware.js';
 import validatorMiddleware from '@middy/validator';
-import getAuctionsSchema, {
-  responseSchema,
-} from '../libs/schemas/getAuctionsSchema.js';
+import getAuctionsSchema from '../libs/schemas/getAuctionsSchema.js';
+import responseSchema from '../libs/schemas/httpLambdaResponseSchema.js';
 
 const getAuctions = async (event, context) => {
   let auctions;

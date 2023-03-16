@@ -1,6 +1,6 @@
 import { transpileSchema } from '@middy/validator/transpile';
 
-const schema = transpileSchema({
+export default createAuctionSchema = transpileSchema({
   type: 'object',
   required: ['body'],
   properties: {
@@ -10,24 +10,9 @@ const schema = transpileSchema({
       properties: {
         title: {
           type: 'string',
-            pattern: '^[A-Za-z]+',
+          pattern: '^[A-Za-z]+',
         },
       },
     }, // end queryStringParameters
   },
 });
-
-export const responseSchema = transpileSchema({
-  type: 'object',
-  required: ['body', 'statusCode'],
-  properties: {
-    body: {
-      type: 'string',
-    },
-    statusCode: {
-      type: 'number',
-    },
-  },
-});
-
-export default schema;

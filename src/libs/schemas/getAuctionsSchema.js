@@ -1,6 +1,6 @@
 import { transpileSchema } from '@middy/validator/transpile';
 
-const schema = transpileSchema({
+export default getAuctionSchema = transpileSchema({
   type: 'object',
   properties: {
     required: ['queryStringParameters'],
@@ -17,18 +17,3 @@ const schema = transpileSchema({
     }, // end queryStringParameters
   },
 });
-
-export const responseSchema = transpileSchema({
-  type: 'object',
-  required: ['body', 'statusCode'],
-  properties: {
-    body: {
-      type: 'string',
-    },
-    statusCode: {
-      type: 'number',
-    },
-  },
-});
-
-export default schema;
