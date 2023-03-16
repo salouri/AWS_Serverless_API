@@ -1,6 +1,6 @@
 import { transpileSchema } from '@middy/validator/transpile';
 
-export default responseSchema = transpileSchema({
+const responseSchema = transpileSchema({
   type: 'object',
   required: ['body', 'statusCode'],
   properties: {
@@ -12,3 +12,5 @@ export default responseSchema = transpileSchema({
     },
   },
 });
+
+export default responseSchema;
