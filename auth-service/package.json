@@ -1,7 +1,7 @@
 {
   "name": "auth-service",
   "version": "1.0.0",
-  "description": "Demonstration of protecting API gateway endpoints with auth0",
+  "description": "Service to protect API gateway endpoints with auth0",
   "license": "MIT",
   "devDependencies": {
     "serverless-bundle": "^6.0.0"
