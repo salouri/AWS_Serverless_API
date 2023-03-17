@@ -10,6 +10,7 @@ import responseSchema from '../libs/schemas/httpLambdaResponseSchema.js';
 
 const createAuction = async (event, context) => {
   const { title } = event.body;
+  const { email } = event.requestContext.authorizer;
   const now = new Date();
   const endDate = new Date();
   endDate.setHours(now.getHours() + 1);
@@ -23,6 +24,7 @@ const createAuction = async (event, context) => {
     highestBid: {
       amount: 0,
     },
+    seller: email,
   };
   const params = {
     TableName: process.env.AUCTIONS_TABLE_NAME,
