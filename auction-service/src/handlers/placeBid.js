@@ -10,6 +10,7 @@ import responseSchema from '../libs/schemas/httpLambdaResponseSchema.js';
 
 const placeBid = async (event, context) => {
   let updatedAuction;
+  const { email } = event.requestContext.authorizer;
   const { id } = event.pathParameters;
   const { amount } = event.body;
   const auction = await getAuctionById(id);
@@ -27,11 +28,13 @@ const placeBid = async (event, context) => {
   const params = {
     TableName: process.env.AUCTIONS_TABLE_NAME,
     Key: { id },
-    UpdateExpression: 'set highestBid.amount = :amount',
+    UpdateExpression:
+      'set highestBid.amount = :amount , highestBid.bidder = :bidder',
     ConditionExpression: 'highestBid.amount < :amount AND #status = :status',
     ExpressionAttributeValues: {
       ':amount': amount,
       ':status': 'OPEN',
+      ':bidder': email,
     },
     ExpressionAttributeNames: {
       '#status': 'status',
