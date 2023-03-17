@@ -10,10 +10,16 @@ import responseSchema from '../libs/schemas/httpLambdaResponseSchema.js';
 
 const placeBid = async (event, context) => {
   let updatedAuction;
-  const { email } = event.requestContext.authorizer;
+  const bidder = event.requestContext.authorizer.email;
   const { id } = event.pathParameters;
   const { amount } = event.body;
+
   const auction = await getAuctionById(id);
+
+  if (bidder === auction.seller) {
+    throw new createError.Forbidden(`You cannot bid on your own auction!`);
+  }
+
   if (auction.status !== 'OPEN') {
     throw new createError.Forbidden(
       `Auction was closed on ${auction.endingAt.slice(0, 19)}`
@@ -25,6 +31,10 @@ const placeBid = async (event, context) => {
     );
   }
 
+  if (bidder === auction.highestBid.bidder) {
+    throw new createError.Forbidden(`You are already the highest bidder!`);
+  }
+
   const params = {
     TableName: process.env.AUCTIONS_TABLE_NAME,
     Key: { id },
@@ -34,7 +44,7 @@ const placeBid = async (event, context) => {
     ExpressionAttributeValues: {
       ':amount': amount,
       ':status': 'OPEN',
-      ':bidder': email,
+      ':bidder': bidder,
     },
     ExpressionAttributeNames: {
       '#status': 'status',
