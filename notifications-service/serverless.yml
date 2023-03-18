@@ -1,4 +1,4 @@
-service: notifications-service
+service: notification-service
 
 plugins:
   - serverless-bundle

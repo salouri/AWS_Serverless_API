@@ -1,7 +1,7 @@
 {
   "name": "notification-service",
   "version": "1.0.0",
-  "description": "Notifications service for the serverless stack",
+  "description": "Notification service for the serverless stack",
   "license": "MIT",
   "dependencies": {
     "@aws-sdk/client-ses": "^3.294.0"
