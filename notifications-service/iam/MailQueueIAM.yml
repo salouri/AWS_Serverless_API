@@ -1,0 +1,9 @@
+MailQueueIAM:
+  Effect: Allow
+  Action:
+    - sqs:SendMessage
+    - sqs:ReceiveMessage
+    - sqs:DeleteMessage
+    - sqs:GetQueueUrl
+    - sqs:GetQueueAttributes
+  Resource: ${self:custom.MailQueue.arn}
