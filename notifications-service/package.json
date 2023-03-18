@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Notifications service for the serverless stack",
   "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-ses": "^3.294.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.21.3",
     "@babel/plugin-transform-runtime": "^7.21.0",
