@@ -1,5 +1,5 @@
 {
-  "name": "notifications-service",
+  "name": "notification-service",
   "version": "1.0.0",
   "description": "Notifications service for the serverless stack",
   "license": "MIT",

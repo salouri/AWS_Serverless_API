@@ -24,8 +24,8 @@ resources:
     MailQueueUrl: ${file(resources/MailQueueRes.yml):Outputs.MailQueueUrl}
 
 functions:
-  sendMail:
-    handler: src/handlers/sendMail.handler
+  sendEMail:
+    handler: src/handlers/sendEMail.handler
     events:
       - sqs:
           arn: ${self:custom.MailQueue.arn}
