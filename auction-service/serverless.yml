@@ -11,7 +11,7 @@ provider:
   region: ${opt:region, 'eu-west-1'}
   environment:
     AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
-    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    MAIL_QUEUE_URL: ${self:custom.MailQueue.url}
   iam:
     role:
       statements:
@@ -74,5 +74,9 @@ custom:
   Authorizer:
     name: auth-service-${self:provider.stage}
     arn: arn:aws:lambda:${aws:region}:${aws:accountId}:function:auth-service-dev-auth
+  MailQueue:
+    name: mail-queue-${self:provider.stage}
+    arn: ${cf:notification-service-${self:provider.stage}.MailQueueArn} # using 'Outputs' defined in the notification cf stack
+    url: ${cf:notification-service-${self:provider.stage}.MailQueueUrl}
   bundle:
     linting: false
