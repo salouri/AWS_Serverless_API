@@ -14,16 +14,28 @@ provider:
       statements:
         - ${file(iam/SendMailIAM.yml):SendMailIAM}
   environment:
-    # AWS_REGION: ${self:provider.region}
+    VERIFIED_SENDER: ${self:custom.verified_ses_email}
+
+resources:
+  Resources:
+    MailQueueRes: ${file(resources/MailQueueRes.yml):MailQueue}
+  Outputs:
+    MailQueueArn: ${file(resources/MailQueueRes.yml):Outputs.MailQueueArn}
+    MailQueueUrl: ${file(resources/MailQueueRes.yml):Outputs.MailQueueUrl}
 
 functions:
   sendMail:
     handler: src/handlers/sendMail.handler
-    # events:
-    #   - http:
-    #       method: GET
-    #       path: /sendMail
+    events:
+      - sqs:
+          arn: ${self:custom.MailQueue.arn}
+          batchSize: 1 # default is 10
 
 custom:
+  MailQueue:
+    name: MailQueue-${self:provider.stage}
+    arn: !GetAtt MailQueueRes.Arn
+    url: !Ref MailQueueRes # get the queue url
+  verified_ses_email: salouri@gmail.com
   bundle:
     linting: false
