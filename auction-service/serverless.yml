@@ -12,15 +12,19 @@ provider:
   environment:
     AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
     MAIL_QUEUE_URL: ${self:custom.MailQueue.url}
+    AUCTIONS_BUCKET_NAME: ${self:custom.AuctionsBucket.name}
   iam:
     role:
       statements:
         - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
         - ${file(iam/MailQueueIAM.yml):MailQueueIAM}
+        - ${file(iam/AuctionsBucketIAM.yml):AuctionsBucketIAM}
 
 resources:
   Resources:
     AuctionsTableRes: ${file(resources/AuctionsTable.yml):AuctionsTable}
+    AuctionsBucketRes: ${file(resources/AuctionsBucket.yml):AuctionsBucket}
+    AuctionsBucketPolicyRes: ${file(resources/AuctionsBucket.yml):AuctionsBucketPolicy}
 
 functions:
   createAuction:
@@ -79,5 +83,7 @@ custom:
     name: mail-queue-${self:provider.stage}
     arn: ${cf:notification-service-${self:provider.stage}.MailQueueArn} # using 'Outputs' defined in the notification cf stack
     url: ${cf:notification-service-${self:provider.stage}.MailQueueUrl}
+  AuctionsBucket:
+    name: auctions-bucket-salouri-${self:provider.stage}
   bundle:
     linting: false
