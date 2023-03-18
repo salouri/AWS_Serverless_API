@@ -9,8 +9,6 @@ AuctionsBucketPolicy:
   Properties:
     Bucket: !Ref AuctionsBucketRes
     PolicyDocument:
-      Id: MyPolicy
-      Version: 2012-10-17
       Statement:
         - Sid: PublicRead
           Effect: Allow
