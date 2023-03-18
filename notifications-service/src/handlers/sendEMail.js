@@ -31,14 +31,19 @@ const createSendEmailCommand = (
   return new SendEmailCommand(params);
 };
 
-async function sendMail(event, context) {
+async function sendEMail(event, context) {
   console.log(`event: ${JSON.stringify(event, null, 2)}`);
+  const record = event.Records[0];
+  const email = JSON.parse(record.Body); // refer to Auction-Service.sendMessage
+  const { subject, body, recipient } = email;
+
   const sendEmailCommand = createSendEmailCommand(
-    'salouri@gmail.com',
-    'salouri@gmail.com',
-    'Test Email',
-    'Hello from Cars Auctions System'
+    process.env.VERIFIED_SES_SENDER,
+    recipient,
+    subject,
+    body
   );
+
   try {
     const result = await sesClient.send(sendEmailCommand);
     console.log(`result: ${JSON.stringify(result, null, 2)}`);
@@ -47,10 +52,6 @@ async function sendMail(event, context) {
     console.error(e);
     return e;
   }
-  // return {
-  //   statusCode: 200,
-  //   body: JSON.stringify({ message: 'Hello from Cars Auctions System' }),
-  // };
 }
 
-export const handler = sendMail;
+export const handler = sendEMail;
