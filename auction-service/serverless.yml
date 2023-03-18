@@ -67,6 +67,14 @@ functions:
           path: /auction/{id}/bid
           authorizer: ${self:custom.Authorizer.arn}
 
+  uploadAuctionPicture:
+    handler: src/handlers/uploadAuctionPicture.handler
+    events:
+      - http:
+          method: POST
+          path: /auction/{id}/picture
+          authorizer: ${self:custom.Authorizer.arn}
+
   processAuctions:
     handler: src/handlers/processAuctions.handler
     # events:
