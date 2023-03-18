@@ -22,7 +22,6 @@ export const getEndedAuctions = async (endByTime = now) => {
   };
   try {
     const data = await ddbDocClient.send(new QueryCommand(params));
-    console.log(`data: ${JSON.stringify(data, null, 2)}`);
     auctions = data?.Items;
   } catch (error) {
     console.log(error);
