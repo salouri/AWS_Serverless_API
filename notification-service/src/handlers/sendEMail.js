@@ -34,11 +34,11 @@ const createSendEmailCommand = (
 async function sendEMail(event, context) {
   console.log(`event: ${JSON.stringify(event, null, 2)}`);
   const record = event.Records[0];
-  const email = JSON.parse(record.Body); // refer to Auction-Service.sendMessage
+  const email = JSON.parse(record.body); // refer to Auction-Service.sendMessage
   const { subject, body, recipient } = email;
 
   const sendEmailCommand = createSendEmailCommand(
-    process.env.VERIFIED_SES_SENDER,
+    process.env.VERIFIED_SENDER,
     recipient,
     subject,
     body
