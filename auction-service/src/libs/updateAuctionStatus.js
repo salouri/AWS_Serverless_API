@@ -21,7 +21,8 @@ export const updateAuctionStatus = async (id, status) => {
 
   try {
     const data = await ddbDocClient.send(new UpdateCommand(params));
-    updatedAuction = data?.Attributes;
+    const updatedAuction = data?.Attributes;
+    return updatedAuction;
   } catch (error) {
     console.log(error);
     throw new createError.InternalServerError(error);
