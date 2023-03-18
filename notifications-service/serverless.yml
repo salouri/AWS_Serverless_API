@@ -1,5 +1,4 @@
-service:
-  name: notifications-service
+service: notifications-service
 
 plugins:
   - serverless-bundle
@@ -9,11 +8,22 @@ provider:
   runtime: nodejs18.x
   memorySize: 256
   stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'eu-west-1'}
+  iam:
+    role:
+      statements:
+        - ${file(iam/SendMailIAM.yml):SendMailIAM}
+  environment:
+    # AWS_REGION: ${self:provider.region}
 
 functions:
-  hello:
-    handler: src/handlers/hello.handler
-    events:
-      - http:
-          method: GET
-          path: /hello
+  sendMail:
+    handler: src/handlers/sendMail.handler
+    # events:
+    #   - http:
+    #       method: GET
+    #       path: /sendMail
+
+custom:
+  bundle:
+    linting: false
