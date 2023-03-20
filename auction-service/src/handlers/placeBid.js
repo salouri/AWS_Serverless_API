@@ -1,6 +1,6 @@
 'use strict';
-import { UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import createError from 'http-errors';
+import { UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import ddbDocClient from '../libs/ddbDocClient.js';
 import commonMiddleware from '../libs/commonMiddleware.js';
 import validatorMiddleware from '@middy/validator';

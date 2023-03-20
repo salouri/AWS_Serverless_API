@@ -1,8 +1,7 @@
 'use strict';
 import ddbDocClient from './ddbDocClient.js';
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import commonMiddleware from './commonMiddleware.js';
-import getAuctionById from './getAuctionById.js';
+
 import createError from 'http-errors';
 
 export const updateAuctionStatus = async (id, status) => {
@@ -18,13 +17,13 @@ export const updateAuctionStatus = async (id, status) => {
       '#status': 'status',
     },
   };
-
+  let updatedAuction;
   try {
     const data = await ddbDocClient.send(new UpdateCommand(params));
-    const updatedAuction = data?.Attributes;
-    return updatedAuction;
+    updatedAuction = data?.Attributes;
   } catch (error) {
     console.log(error);
     throw new createError.InternalServerError(error);
   }
+  return updatedAuction;
 };
